@@ -8,11 +8,9 @@ node {
     }
 
     stage('Testing docker') {
-      steps {
-           sh '''#!/bin/bash
-                   docker --version
-           '''
-         }
+       sh '''#!/bin/bash
+               docker --version
+       '''
     }
     stage('Build image') {
         /* This builds the actual image */
