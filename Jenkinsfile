@@ -10,7 +10,7 @@ node {
 
       stage('Test Version'){
         steps{
-          docker --version
+          ls -lah
         }
       }
       stage('Build image') {
