@@ -11,7 +11,7 @@ node {
     stage('Build image') {
         /* This builds the actual image */
 
-        app = docker.build("hw-guni-auto")
+        app = docker.build("hw-guni")
     }
 
     stage('Push image') {
