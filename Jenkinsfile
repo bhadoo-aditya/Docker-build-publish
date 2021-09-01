@@ -1,10 +1,6 @@
 
 node {
     def app
-    
-    tools {
-       dockerTool 'docker'
-    }
 
     stage('Clone repository') {
         /* Cloning the Repository to our Workspace */
@@ -12,6 +8,11 @@ node {
         checkout scm
     }
 
+	stage('Test Version'){
+		steps{
+			docker --version
+		}
+	}
     stage('Build image') {
         /* This builds the actual image */
 
