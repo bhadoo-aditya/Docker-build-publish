@@ -1,33 +1,29 @@
-
 node {
     def app
-    stages {
-      stage('Clone repository') {
-          /* Cloning the Repository to our Workspace */
 
-          checkout scm
-      }
+    stage('Clone repository') {
+        /* Cloning the Repository to our Workspace */
 
-      stage('Test Version'){
-        steps{
-          ls -lah
-        }
-      }
-      stage('Build image') {
-          /* This builds the actual image */
+        checkout scm
+    }
 
-          app = docker.build("hw-guni")
-      }
+    stage('Test Version'){
+        docker --version
+    }
+    stage('Build image') {
+        /* This builds the actual image */
 
-      stage('Push image') {
-          /* 
-  			You would need to first register with DockerHub before you can push images to your account
-  		*/
-          docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-              app.push("${env.BUILD_NUMBER}")
-              app.push("latest")
-              } 
-                  echo "Trying to Push Docker Build to DockerHub"
-      }
+        app = docker.build("hw-guni")
+    }
+
+    stage('Push image') {
+        /* 
+			You would need to first register with DockerHub before you can push images to your account
+		*/
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+            } 
+                echo "Trying to Push Docker Build to DockerHub"
     }
 }
