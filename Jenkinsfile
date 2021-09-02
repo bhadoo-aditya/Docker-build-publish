@@ -1,10 +1,8 @@
 pipeline {
-  tools {
-    dockerTool 'docker'
-  }
   environment {
-    registry = "https://registry.hub.docker.com"
-    registryCredential = "dockerhub"
+    registry = "adityabhad/docker-test"
+    registryCredential = 'dockerhub'
+    dockerImage = ''
   }
   agent any
   stages {
@@ -16,8 +14,22 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
       }
     }
   }
