@@ -6,9 +6,8 @@ pipeline {
   agent any
   stages {
     stage('Cloning Git') {
-      node {
-        checkout scm
-        
+      steps {
+        git branch: 'main', changelog: false, poll: false, url: 'https://github.com/bhadoo-aditya/Docker-build-publish.git'
       }
     }
     stage('Building image') {
