@@ -1,4 +1,7 @@
 pipeline {
+  tools {
+    dockerTool 'docker'
+  }
   environment {
     registry = "adityabhad/docker-test"
     registryCredential = 'dockerhub'
