@@ -8,12 +8,13 @@ node {
 
         checkout scm
     }
-
+/*
     stage('Testing docker') {
        sh '''#!/bin/bash
                docker --version
        '''
     }
+    */
     stage('Build image') {
         /* This builds the actual image */
 
