@@ -1,4 +1,7 @@
 pipeline {
+  tools {
+    dockerTool 'docker'
+  }
   environment {
     registry = "https://registry.hub.docker.com"
     registryCredential = "dockerhub"
