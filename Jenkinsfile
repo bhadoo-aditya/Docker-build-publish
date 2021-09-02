@@ -1,24 +1,35 @@
-pipeline {
-  tools {
-    dockerTool 'docker'
-  }
-  environment {
-    registry = "https://registry.hub.docker.com"
-    registryCredential = "dockerhub"
-  }
-  agent any
-  stages {
-    stage('Cloning Git') {
-      steps {
-        git branch: 'main', changelog: false, poll: false, url: 'https://github.com/bhadoo-aditya/Docker-build-publish.git'
-      }
+node {
+    def app
+    
+    stage('download docker'){
+      tool name: 'docker', type: 'dockerTool'
     }
-    stage('Building image') {
-      steps{
-        script {
-          docker.build registry + ":$BUILD_NUMBER"
-        }
-      }
+    
+    stage('Clone repository') {
+        /* Cloning the Repository to our Workspace */
+
+        checkout scm
     }
-  }
+
+    stage('Testing docker') {
+       sh '''#!/bin/bash
+               docker --version
+       '''
+    }
+    stage('Build image') {
+        /* This builds the actual image */
+
+        app = docker.build("hw-guni")
+    }
+
+    stage('Push image') {
+        /* 
+			You would need to first register with DockerHub before you can push images to your account
+		*/
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+            } 
+                echo "Trying to Push Docker Build to DockerHub"
+    }
 }
